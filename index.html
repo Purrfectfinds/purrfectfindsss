@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Purrfect Finds — STEM 12-A</title>
+<style>
+  :root {
+    --pink: #ff69b4;
+    --pink-2: #ff8fb1;
+    --text: #4b2e2e;
+    --bg-card: rgba(255, 192, 203, 0.95);
+    --bg-modal: #fff;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    color: var(--text);
+    background: linear-gradient(rgba(255, 182, 193, 0.3), rgba(255, 182, 193, 0.3)),
+      url('https://cdn.pixabay.com/photo/2017/03/29/12/20/cat-2189693_1280.jpg') no-repeat center/cover fixed;
+    line-height: 1.4;
+    overflow-x: hidden;
+    position: relative;
+  }
+  header {
+    background: var(--pink);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+  }
+  .brand img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+  }
+  .brand h1 {
+    font-size: 22px;
+    margin: 0;
+  }
+  nav a {
+    color: #fff;
+    background: var(--pink-2);
+    padding: 8px 12px;
+    border-radius: 999px;
+    margin-left: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+  }
+  nav a:hover {
+    opacity: 0.9;
+  }
+  #cartBtn {
+    position: relative;
+    background: var(--pink-2);
+    border: none;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+    margin-left: 12px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 0 8px rgba(255, 105, 180, 0.6);
+    transition: filter 0.2s ease;
+  }
+  #cartBtn:hover {
+    filter: brightness(0.9);
+  }
+  #cartCount {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: #a03b6b;
+    color: #fff;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 20px;
+    pointer-events: none;
+    font-weight: bold;
+    min-width: 18px;
+    text-align: center;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 24px auto;
+    padding: 16px;
+  }
+  .card {
+    background: var(--bg-card);
+    border-radius: 14px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    padding: 18px;
+    color: #4b2e2e;
+    position: relative;
+  }
+  .section-title {
+    margin: 0 0 14px 0;
+    font-size: 24px;
+    text-align: center;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .product {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .product img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+  .row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  select,
+  input[type='number'],
+  input[type='text'],
+  input[type='tel'],
+  input[type='email'],
+  textarea {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  select,
+  input[type='text'],
+  input[type='tel'],
+  input[type='email'],
+  textarea {
+    width: 100%;
+    padding: 10px;
+  }
+  .qty-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 90px;
+    height: 36px;
+    margin-left: auto;
+  }
+  .qty-stepper button {
+    background: var(--pink);
+    border: none;
+    color: white;
+    width: 30px;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    padding: 0;
+    user-select: none;
+    transition: filter 0.2s ease;
+  }
+  .qty-stepper button:hover {
+    filter: brightness(0.9);
+  }
+  .qty-stepper input {
+    border: none;
+    width: 30px;
+    text-align: center;
+    font-size: 16px;
+    outline: none;
+    padding: 0 4px;
+  }
+  .btn {
+    background: var(--pink);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: filter 0.2s ease-in-out;
+  }
+  .btn.full {
+    width: 100%;
+  }
+  .btn.secondary {
+    background: #ddd;
+    color: #222;
+  }
+  .btn:hover {
+    filter: brightness(0.95);
+  }
+  .muted {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+  .badge {
+    display: inline-block;
+    background: #ffe4ef;
+    color: #a03b6b;
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-size: 12px;
+    margin-left: 6px;
+  }
+  footer {
+    margin-top: 24px;
+    background: var(--pink);
+    color: var(--text);
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+  }
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 100;
+  }
+  .modal.open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .modal .content {
+    background: var(--bg-modal);
+    border-radius: 14px;
+    max-width: 780px;
+    width: 100%;
+    max-height: 85vh;
+    overflow: auto;
+    padding: 18px;
+    position: relative;
+    color: #222;
+  }
+  .close {
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    font-size: 22px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+  }
+  #loadingOverlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255,255,255,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+  }
+  #loadingOverlay .loader {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid var(--pink);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+  }
+  #toast {
+    visibility: hidden;
+    min-width: 240px;
+    margin-left: -120px;
+    background-color: var(--pink);
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    padding: 12px;
+    position: fixed;
+    z-index: 300;
+    left: 50%;
+    bottom: 40px;
+    font-size: 16px;
+  }
+  #toast.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  @keyframes fadein {
+    from {bottom: 30px; opacity: 0;}
+    to {bottom: 40px; opacity: 1;}
+  }
+  @keyframes fadeout {
+    from {bottom: 40px; opacity: 1;}
+    to {bottom: 30px; opacity: 0;}
+  }
+  .brief-toggle {
+    cursor: pointer;
+    font-size: 14px;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--pink);
+    font-weight: bold;
+  }
+  .brief-toggle .arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+  .brief-toggle.active .arrow {
+    transform: rotate(90deg);
+  }
+  .product-brief {
+    display: none;
+    font-size: 13px;
+    color: #555;
+    border-top: 1px solid #ffc3d6;
+    padding-top: 6px;
+    margin-top: 6px;
+  }
+  /* Cart Sidebar */
+  #cartSidebar {
+    position: fixed;
+    top: 0;
+    right: -380px;
+    width: 380px;
+    height: 100%;
+    background: #fff;
+    box-shadow: -2px 0 12px rgba(0, 0, 0, 0.3);
+    border-left: 4px solid var(--pink);
+    transition: right 0.3s ease-in-out;
+    z-index: 120;
+    display: flex;
+    flex-direction: column;
+  }
+  #cartSidebar.open {
+    right: 0;
+  }
+  #cartSidebar header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid #ffd3ea;
+    background: var(--pink);
+    color: #fff;
+  }
+  #cartSidebar header img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    flex-shrink: 0;
+  }
+  #cartSidebar header h2 {
+    font-size: 22px;
+    margin: 0;
+    white-space: nowrap;
+  }
+  #cartSidebar header button.close-cart {
+    margin-left: auto;
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+  }
+  #cartSidebar .cart-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+  }
+  #cartSidebar .cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #f0c2d8;
+    padding-bottom: 8px;
+  }
+  #cartSidebar .cart-item div.left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-grow: 1;
+  }
+  #cartSidebar .cart-item .image-container {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+  #cartSidebar .cart-item .image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+  }
+  #cartSidebar .cart-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+  #cartSidebar .cart-item .info {
+    flex-grow: 1;
+  }
+  #cartSidebar .cart-item .remove-btn {
+    background: transparent;
+    border: none;
+    color: var(--pink);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+  #cartSidebar footer {
+    padding: 12px 16px;
+    border-top: 1px solid #ffd3ea;
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--pink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  #cartSidebar footer span.total-price {
+    font-weight: normal;
+    font-size: 14px;
+    color: #a03b6b;
+  }
+  #cartSidebar footer button {
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <img src="https://i.ibb.co/mrf3W4Wq/4d6f9eaa-bd03-4bbc-9871-e175e3799acb-2.jpg" alt="Purrfect Finds Logo" />
+    <div>
+      <h1>Purrfect Finds</h1>
+      <div class="muted">Locally made cat toys & accessories • STEM 12-A</div>
+    </div>
+  </div>
+  <nav>
+    <a href="#products">Products</a>
+    <a href="#" onclick="openModal('howModal');return false;">How It Works</a>
+    <a href="#" onclick="openModal('policiesModal');return false;">Policies</a>
+    <a href="#" onclick="openModal('contactModal');return false;">Contact</a>
+    <a href="#" onclick="openModal('cyberModal');return false;">Cyber Safety</a>
+  </nav>
+  <button id="cartBtn" aria-label="Toggle Cart" title="Show Cart" onclick="toggleCart()">
+    🛒 Cart <span id="cartCount" aria-live="polite" aria-atomic="true">0</span>
+  </button>
+</header>
+<main id="products" class="container card">
+  <h2 class="section-title">Our Products</h2>
+  <div class="grid">
+    <!-- Fluffy Mouse Toy -->
+    <div class="product card" data-product="Fluffy Mouse Toy" data-price="99" data-img="https://i.ibb.co/vx8F0TH1/Rhode-Island-Novelty-6-Inch-Wind-Up-Mouse-Toy-Set-of-4-Assorted.jpg">
+      <img src="https://i.ibb.co/vx8F0TH1/Rhode-Island-Novelty-6-Inch-Wind-Up-Mouse-Toy-Set-of-4-Assorted.jpg" alt="Fluffy Mouse Toy" />
+      <h3>Fluffy Mouse Toy <span class="badge">₱99</span></h3>
+      <div class="brief-toggle" onclick="toggleBrief(this)">
+        <span class="arrow">▶</span> Product Details
+      </div>
+      <div class="product-brief">
+        Soft and lightweight mouse toy designed to engage your cat's hunting instincts.
+      </div>
+      <p class="muted delivery-estimate">Estimated delivery: 3-5 business days</p>
+      <div class="row">
+        <select id="color-mouse" aria-label="Mouse Color">
+          <option>Black</option><option>Brown</option><option>Gray</option><option>Green</option>
+        </select>
+        <input id="qty-mouse" type="number" min="1" value="1" aria-label="Quantity" class="qty-input" />
+      </div>
+      <div class="row" style="gap:8px; align-items:center;">
+        <button class="btn full" onclick="order('Fluffy Mouse Toy')">Buy Now</button>
+        <div class="qty-stepper">
+          <button type="button" aria-label="Decrease quantity" onclick="changeQty('Fluffy Mouse Toy', -1)">−</button>
+          <input type="number" min="1" value="1" aria-label="Quantity to Add to Cart" id="addqty-Fluffy Mouse Toy" />
+          <button type="button" aria-label="Increase quantity" onclick="changeQty('Fluffy Mouse Toy', 1)">+</button>
+        </div>
+        <button class="btn full secondary" style="width:auto; padding: 10px 20px;" onclick="addToCart('Fluffy Mouse Toy', this)">Add to Cart</button>
+      </div>
+    </div>
+    <!-- Colorful Cat Collar -->
+    <div class="product card" data-product="Colorful Cat Collar" data-price="129" data-img="https://i.ibb.co/Y4P4Mfj5/Cat-Collar-Cookie-Kitten-Collar-Chocolate-Chip-Dog-Collar-Hersey-Cat-Collar-Breakaway-Food-Collar-fo.jpg">
+      <img src="https://i.ibb.co/Y4P4Mfj5/Cat-Collar-Cookie-Kitten-Collar-Chocolate-Chip-Dog-Collar-Hersey-Cat-Collar-Breakaway-Food-Collar-fo.jpg" alt="Colorful Cat Collar" />
+      <h3>Colorful Cat Collar <span class="badge">₱129</span></h3>
+      <div class="brief-toggle" onclick="toggleBrief(this)">
+        <span class="arrow">▶</span> Product Details
+      </div>
+      <div class="product-brief">
+        Soft, adjustable collar with a cute bell to keep track of your furry friend.
+      </div>
+      <p class="muted delivery-estimate">Estimated delivery: 2-4 business days</p>
+      <div class="row">
+        <select id="color-collar" aria-label="Collar Color">
+          <option>Red</option><option>Blue</option><option>Pink</option><option>Yellow</option>
+        </select>
+        <select id="size-collar" aria-label="Collar Size">
+          <option>Small (18-23 cm)</option>
+          <option>Medium (23-28 cm)</option>
+          <option>Large (28-33 cm)</option>
+        </select>
+      </div>
+      <div class="muted">Size Guide: Measure your cat’s neck and add 2 cm for comfort.</div>
+      <div class="row" style="margin-top:8px;">
+        <input id="qty-collar" type="number" min="1" value="1" aria-label="Quantity" />
+      </div>
+      <div class="row" style="gap:8px; align-items:center;">
+        <button class="btn full" onclick="order('Colorful Cat Collar')">Buy Now</button>
+        <div class="qty-stepper">
+          <button type="button" aria-label="Decrease quantity" onclick="changeQty('Colorful Cat Collar', -1)">−</button>
+          <input type="number" min="1" value="1" aria-label="Quantity to Add to Cart" id="addqty-Colorful Cat Collar" />
+          <button type="button" aria-label="Increase quantity" onclick="changeQty('Colorful Cat Collar', 1)">+</button>
+        </div>
+        <button class="btn full secondary" style="width:auto; padding: 10px 20px;" onclick="addToCart('Colorful Cat Collar', this)">Add to Cart</button>
+      </div>
+    </div>
+    <!-- Cozy Cat Sweater -->
+    <div class="product card" data-product="Cozy Cat Sweater" data-price="299" data-img="https://i.ibb.co/6KTNVt0/Dog-and-Cat-Sweater-with-Turtleneck.jpg">
+      <img src="https://i.ibb.co/6KTNVt0/Dog-and-Cat-Sweater-with-Turtleneck.jpg" alt="Cozy Cat Sweater" />
+      <h3>Cozy Cat Sweater <span class="badge">₱299</span></h3>
+      <div class="brief-toggle" onclick="toggleBrief(this)">
+        <span class="arrow">▶</span> Product Details
+      </div>
+      <div class="product-brief">
+        Warm and stylish sweater made to keep your cat cozy during chilly days.
+      </div>
+      <p class="muted delivery-estimate">Estimated delivery: 5-7 business days</p>
+      <div class="row">
+        <select id="color-sweater" aria-label="Sweater Color">
+          <option>Orange</option><option>Pink</option><option>White</option><option>Black</option>
+        </select>
+        <select id="size-sweater" aria-label="Sweater Size">
+          <option>Small</option><option>Medium</option><option>Large</option>
+        </select>
+      </div>
+      <div class="row" style="margin-top:8px;">
+        <input id="qty-sweater" type="number" min="1" value="1" aria-label="Quantity" />
+      </div>
+      <div class="row" style="gap:8px; align-items:center;">
+        <button class="btn full" onclick="order('Cozy Cat Sweater')">Buy Now</button>
+        <div class="qty-stepper">
+          <button type="button" aria-label="Decrease quantity" onclick="changeQty('Cozy Cat Sweater', -1)">−</button>
+          <input type="number" min="1" value="1" aria-label="Quantity to Add to Cart" id="addqty-Cozy Cat Sweater" />
+          <button type="button" aria-label="Increase quantity" onclick="changeQty('Cozy Cat Sweater', 1)">+</button>
+        </div>
+        <button class="btn full secondary" style="width:auto; padding: 10px 20px;" onclick="addToCart('Cozy Cat Sweater', this)">Add to Cart</button>
+      </div>
+    </div>
+    <!-- Dreamy Cat Bed -->
+    <div class="product card" data-product="Dreamy Cat Bed" data-price="799" data-img="https://i.ibb.co/QvxncnGb/download-2.jpg">
+      <img src="https://i.ibb.co/QvxncnGb/download-2.jpg" alt="Dreamy Cat Bed" />
+      <h3>Dreamy Cat Bed <span class="badge">₱799</span></h3>
+      <div class="brief-toggle" onclick="toggleBrief(this)">
+        <span class="arrow">▶</span> Product Details
+      </div>
+      <div class="product-brief">
+        Luxuriously soft cat bed with plush cushioning for ultimate comfort and warmth.
+      </div>
+      <p class="muted delivery-estimate">Estimated delivery: 5-8 business days</p>
+      <div class="row">
+        <select id="color-catbed" aria-label="Bed Color">
+          <option>Pink</option>
+          <option>Gray</option>
+          <option>Blue</option>
+          <option>Beige</option>
+        </select>
+        <input id="qty-catbed" type="number" min="1" value="1" aria-label="Quantity" />
+      </div>
+      <div class="row" style="gap:8px; align-items:center;">
+        <button class="btn full" onclick="order('Dreamy Cat Bed')">Buy Now</button>
+        <div class="qty-stepper">
+          <button type="button" aria-label="Decrease quantity" onclick="changeQty('Dreamy Cat Bed', -1)">−</button>
+          <input type="number" min="1" value="1" aria-label="Quantity to Add to Cart" id="addqty-Dreamy Cat Bed" />
+          <button type="button" aria-label="Increase quantity" onclick="changeQty('Dreamy Cat Bed', 1)">+</button>
+        </div>
+        <button class="btn full secondary" style="width:auto; padding: 10px 20px;" onclick="addToCart('Dreamy Cat Bed', this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>
+  © 2025 Purrfect Finds | STEM 12-A Cat Toys and Accessories Seller | All Rights Reserved
+</footer>
+<!-- Cart Sidebar -->
+<aside id="cartSidebar" aria-label="Shopping Cart" role="region" aria-live="polite" aria-atomic="true">
+  <header>
+    <img src="https://i.ibb.co/mrf3W4Wq/4d6f9eaa-bd03-4bbc-9871-e175e3799acb-2.jpg" alt="Purrfect Finds Logo" />
+    <h2>Purrfect Finds Basket</h2>
+    <button aria-label="Close Cart" class="close-cart" onclick="toggleCart()">✕</button>
+  </header>
+  <div class="cart-list" id="cartList">
+    <p style="padding:16px; color:#a03b6b;">Your basket is empty.</p>
+  </div>
+  <footer>
+    <span>Total selected: <span id="cartTotal">0</span></span>
+    <span class="total-price">| Total Price: ₱<span id="cartPrice">0.00</span></span>
+    <button class="btn" id="buySelected" onclick="buySelectedItems()" disabled>Buy Selected</button>
+  </footer>
+</aside>
+<!-- Loading overlay -->
+<div id="loadingOverlay">
+  <div class="loader"></div>
+</div>
+<!-- Toast notification -->
+<div id="toast"></div>
+<!-- Modals -->
+<div id="howModal" class="modal">
+  <div class="content" role="dialog" aria-modal="true" aria-labelledby="howModalTitle">
+    <button class="close" onclick="closeModal('howModal')" aria-label="Close How It Works">✕</button>
+    <h2 id="howModalTitle">How It Works</h2>
+    <p>Welcome to Purrfect Finds! Here’s how you can find and purchase your perfect cat toys and accessories:</p>
+    <ul>
+      <li>Browse our handcrafted products displayed in the Products section.</li>
+      <li>Choose colors, sizes, and quantity of the items you like.</li>
+      <li>Click 'Add to Cart' to save items for later or 'Buy Now' to proceed immediately.</li>
+      <li>If you choose 'Buy Now', a warning popup will help you stay safe while ordering (this is an educational demo).</li>
+      <li>Check out our business policies and contact us if you have any questions.</li>
+    </ul>
+    <div style="display:flex;justify-content:flex-end;margin-top:12px;">
+      <button class="btn" onclick="closeModal('howModal')">Close</button>
+    </div>
+  </div>
+</div>
+<div id="policiesModal" class="modal">
+  <div class="content" role="dialog" aria-modal="true" aria-labelledby="policiesModalTitle">
+    <button class="close" onclick="closeModal('policiesModal')" aria-label="Close Policies">✕</button>
+    <h2 id="policiesModalTitle">Business Introduction & Policies</h2>
+    <p>Welcome to Purrfect Finds - the cat's meow of online shops! We sell locally made toys, collars, beds, and other goodies that make your feline feel like royalty. Every item is crafted with love, so your cat can pounce, nap, and purr in pure happiness.</p>
+    <h3>PAYMENT POLICY</h3>
+    <p>All payments must be made before we start packing your purr-chase. We accept GCash, bank transfer, and cash on delivery for select areas. Any transaction fees from your chosen method are your responsibility.</p>
+    <h3>SHIPPING POLICY</h3>
+    <p>We pack each order with care and ship within 1–2 business days after payment is confirmed. Shipping usually takes 3–5 business days depending on location.</p>
+    <h3>CORRECTNESS OF INFORMATION</h3>
+    <p>Please double-check your details before hitting “Order Meow.” If your address is wrong, your order might wander off like a curious kitten. Let us know of any changes within 12 hours.</p>
+    <h3>DISCLAIMER AND ACCEPTANCE</h3>
+    <p>By shopping at Purrfect Finds, you agree to our purr-licies. We can't control courier delays or weather. Continuing means you paws-itively accept these terms.</p>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+      <button class="btn" onclick="closeModal('policiesModal')">Continue to Shop</button>
+    </div>
+  </div>
+</div>
+<div id="warningModal" class="modal">
+  <div class="content" role="dialog" aria-modal="true" aria-labelledby="warningModalTitle">
+    <button class="close" onclick="closeModal('warningModal')" aria-label="Close Warning">✕</button>
+    <div class="warn-head">
+      <span aria-hidden="true">⚠️</span>
+      <div>
+        <h2 id="warningModalTitle" style="margin:0;">WARNING: Illegitimate Ordering Interface</h2>
+        <div class="muted">This is for educational purposes only.</div>
+      </div>
+    </div>
+    <p>Do <strong>not</strong> enter real personal or payment information on unverified pages. This popup replaces the checkout to teach users how to spot potential scams.</p>
+    <h3 style="margin-top:10px;">Quick Tips</h3>
+    <ul>
+      <li>Verify the seller’s identity and contact details.</li>
+      <li>Use secure payment channels only (GCash/Bank/COD).</li>
+      <li>Never share OTPs, passwords, or card details.</li>
+    </ul>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+      <button class="btn" onclick="closeModal('warningModal')">Go Back to Shop</button>
+    </div>
+  </div>
+</div>
+<div id="contactModal" class="modal">
+  <div class="content" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+    <button class="close" onclick="closeModal('contactModal')" aria-label="Close Contact">✕</button>
+    <h2 id="contactModalTitle">Contact Us</h2>
+    <p>We’d love to hear from you! Find us on Facebook:</p>
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+      <img src="https://i.ibb.co/mrf3W4Wq/4d6f9eaa-bd03-4bbc-9871-e175e3799acb-2.jpg" alt="Purrfect Finds Logo" style="width:56px; height:56px; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,.25);" />
+      <a href="https://www.facebook.com/purrfectfinds" target="_blank" rel="noopener" style="font-weight:bold; font-size:18px; color: var(--pink); text-decoration:none;">
+        Purrfect Finds
+      </a>
+    </div>
+    <form onsubmit="alert('Thank you! This is a demo form.'); return false;">
+      <input type="text" placeholder="Your Name" required />
+      <input type="email" placeholder="Email" required />
+      <textarea placeholder="Message" rows="4" required></textarea>
+      <button type="submit" class="btn full" style="margin-top: 10px;">Send Message</button>
+    </form>
+  </div>
+</div>
+<div id="cyberModal" class="modal">
+  <div class="content" role="dialog" aria-modal="true" aria-labelledby="cyberModalTitle">
+    <button class="close" onclick="closeModal('cyberModal')" aria-label="Close Cyber Safety">✕</button>
+    <h2 id="cyberModalTitle">Cyber Safety Tips</h2>
+    <p>Online shopping can be fun, but always stay safe. Here are some tips:</p>
+    <ul>
+      <li>Only shop on trusted sites.</li>
+      <li>Check reviews and ratings before buying.</li>
+      <li>Never share personal or payment info on unknown sites.</li>
+      <li>Use secure payment options (GCash, bank transfer, COD).</li>
+      <li>Beware of deals that seem too good to be true.</li>
+    </ul>
+    <div style="display:flex;justify-content:flex-end;margin-top:12px;">
+      <button class="btn" onclick="closeModal('cyberModal')">Close</button>
+    </div>
+  </div>
+</div>
+<script>
+  function toggleBrief(elem) {
+    elem.classList.toggle('active');
+    const brief = elem.nextElementSibling;
+    const arrow = elem.querySelector('.arrow');
+    if (brief.style.display === 'block'){
+      brief.style.display = 'none';
+      arrow.textContent = '▶';
+    } else {
+      brief.style.display = 'block';
+      arrow.textContent = '▼';
+    }
+  }
+  function changeQty(productName, delta) {
+    const input = document.getElementById('addqty-' + productName);
+    if (!input) return;
+    let val = parseInt(input.value);
+    if (isNaN(val)) val = 1;
+    val += delta;
+    if (val < 1) val = 1;
+    input.value = val;
+  }
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+  window.onclick = function(e) {
+    document.querySelectorAll('.modal.open').forEach((m) => {
+      if (e.target === m) m.classList.remove('open');
+    });
+  };
+  window.addEventListener('load', () => {
+    openModal('policiesModal');
+  });
+
+  const cart = {};
+
+  function getProductCard(name) {
+    return Array.from(document.querySelectorAll('.product')).find(p => p.dataset.product === name);
+  }
+
+  function addToCart(productName) {
+    const qtyInput = document.getElementById('addqty-' + productName);
+    let qty = 1;
+    if (qtyInput) {
+      qty = parseInt(qtyInput.value);
+      if (isNaN(qty) || qty < 1) qty = 1;
+      qtyInput.value = qty;
+    }
+    showLoading(true);
+    const productCard = getProductCard(productName);
+
+    if (!cart[productName]) {
+      cart[productName] = { quantity: 0, price: 0, selected: true, img: '' };
+    }
+
+    if (productCard) {
+      cart[productName].price = Number(productCard.dataset.price);
+      cart[productName].img = productCard.querySelector('img')?.src || '';
+    }
+
+    cart[productName].quantity += qty;
+
+    if (productCard) {
+      const productImage = productCard.querySelector('img');
+      if (productImage) {
+        const imgClone = productImage.cloneNode(true);
+        const rect = productImage.getBoundingClientRect();
+        imgClone.style.position = 'fixed';
+        imgClone.style.left = rect.left + 'px';
+        imgClone.style.top = rect.top + 'px';
+        imgClone.style.width = rect.width + 'px';
+        imgClone.style.height = rect.height + 'px';
+        imgClone.style.borderRadius = '12px';
+        imgClone.style.transition = 'all 0.8s ease-in-out';
+        imgClone.style.zIndex = 500;
+        document.body.appendChild(imgClone);
+        const cartBtn = document.getElementById('cartBtn');
+        const cartRect = cartBtn.getBoundingClientRect();
+        setTimeout(() => {
+          imgClone.style.left = (cartRect.left + cartRect.width / 2 - rect.width / 4) + 'px';
+          imgClone.style.top = (cartRect.top + cartRect.height / 2 - rect.height / 4) + 'px';
+          imgClone.style.width = (rect.width / 2) + 'px';
+          imgClone.style.height = (rect.height / 2) + 'px';
+          imgClone.style.opacity = '0.3';
+        }, 50);
+        imgClone.addEventListener('transitionend', () => {
+          imgClone.remove();
+          showLoading(false);
+          showToast(`${qty} ${productName} added to your cart.`);
+          updateCartUI();
+        });
+      } else {
+        showLoading(false);
+        showToast(`${qty} ${productName} added to your cart.`);
+        updateCartUI();
+      }
+    } else {
+      showLoading(false);
+      showToast(`${qty} ${productName} added to your cart.`);
+      updateCartUI();
+    }
+  }
+
+  let loadingOverlayTimeout;
+  function showLoading(show) {
+    const overlay = document.getElementById('loadingOverlay');
+    if (show) {
+      overlay.style.display = 'flex';
+      clearTimeout(loadingOverlayTimeout);
+      loadingOverlayTimeout = setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 4000);
+    } else {
+      overlay.style.display = 'none';
+      clearTimeout(loadingOverlayTimeout);
+    }
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'show';
+    setTimeout(() => {
+      toast.className = toast.className.replace('show', '');
+    }, 3000);
+  }
+
+  function removeFromCart(productName) {
+    if (cart[productName]) {
+      delete cart[productName];
+      updateCartUI();
+    }
+  }
+
+  function toggleSelectCartItem(productName, checked) {
+    if (cart[productName]) {
+      cart[productName].selected = checked;
+      updateCartUI();
+    }
+  }
+
+  function updateCartUI() {
+    const cartList = document.getElementById('cartList');
+    const cartCount = document.getElementById('cartCount');
+    const cartTotal = document.getElementById('cartTotal');
+    const cartPrice = document.getElementById('cartPrice');
+    const buySelectedBtn = document.getElementById('buySelected');
+    cartList.innerHTML = '';
+    const productNames = Object.keys(cart);
+    let totalItemsCount = 0;
+    let selectedItemsCount = 0;
+    let totalPrice = 0;
+    if (productNames.length === 0) {
+      cartList.innerHTML =
+        '<p style="padding:16px; color: #a03b6b;">Your basket is empty.</p>';
+      cartCount.textContent = '0';
+      cartTotal.textContent = '0';
+      cartPrice.textContent = '0.00';
+      buySelectedBtn.disabled = true;
+      return;
+    }
+    productNames.forEach((name) => {
+      const { quantity, selected, img, price } = cart[name];
+      totalItemsCount += quantity;
+      if (selected) {
+        selectedItemsCount += quantity;
+        totalPrice += price * quantity;
+      }
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'cart-item';
+      const leftDiv = document.createElement('div');
+      leftDiv.className = 'left';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = !!selected;
+      checkbox.setAttribute('aria-label', `Select ${name} to buy`);
+      checkbox.onchange = (e) =>
+        toggleSelectCartItem(name, e.target.checked);
+      const imgContainer = document.createElement('div');
+      imgContainer.className = 'image-container';
+      if (img) {
+        const imgElem = document.createElement('img');
+        imgElem.src = img;
+        imgElem.alt = name;
+        imgContainer.appendChild(imgElem);
+      }
+      const infoDiv = document.createElement('div');
+      infoDiv.className = 'info';
+      infoDiv.textContent = `${name} × ${quantity} (₱${price * quantity})`;
+      leftDiv.appendChild(checkbox);
+      leftDiv.appendChild(imgContainer);
+      leftDiv.appendChild(infoDiv);
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-btn';
+      removeBtn.setAttribute('aria-label', `Remove ${name} from cart`);
+      removeBtn.textContent = '×';
+      removeBtn.onclick = () => removeFromCart(name);
+      itemDiv.appendChild(leftDiv);
+      itemDiv.appendChild(removeBtn);
+      cartList.appendChild(itemDiv);
+    });
+    cartCount.textContent = totalItemsCount;
+    cartTotal.textContent = selectedItemsCount;
+    cartPrice.textContent = totalPrice.toFixed(2);
+    buySelectedBtn.disabled = selectedItemsCount === 0;
+  }
+
+  function toggleCart() {
+    const sidebar = document.getElementById('cartSidebar');
+    sidebar.classList.toggle('open');
+    if (sidebar.classList.contains('open')) {
+      updateCartUI();
+    }
+  }
+
+  function order(productName) {
+    openModal('warningModal');
+  }
+
+  function buySelectedItems() {
+    toggleCart();
+    openModal('warningModal');
+  }
+</script>
+</body>
+</html>
